@@ -1,0 +1,14 @@
+rocket_sim:
+    joint_state_controller:
+        type: joint_state_controller/JointStateController
+        publish_rate: 20
+
+    thruster_pitch_joint_position_controller:
+        type: position_controllers/JointPositionController
+        joint: thruster_pitch_joint
+        pid: {p: 1.0, i: 1.0, d: 0.0}
+
+    thruster_roll_joint_position_controller:
+        type: position_controllers/JointPositionController
+        joint: thruster_roll_joint
+        pid: {p: 1.0, i: 1.0, d: 0.0}

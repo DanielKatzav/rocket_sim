@@ -1,0 +1,310 @@
+<sdf version='1.7'>
+  <model name='pointRobot'>
+    <joint name='mobile_joint_x_1' type='prismatic'>
+      <pose relative_to='__model__'>0 0 0.05 0 -0 0</pose>
+      <parent>world</parent>
+      <child>base_link_x_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_x_1'>
+      <pose relative_to='mobile_joint_x_1'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='mobile_joint_y_1' type='prismatic'>
+      <pose relative_to='base_link_x_1'>0 0 0 0 -0 0</pose>
+      <parent>base_link_x_1</parent>
+      <child>base_link_y_1</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_y_1'>
+      <pose relative_to='mobile_joint_y_1'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='mobile_joint_theta_1' type='revolute'>
+      <pose relative_to='base_link_y_1'>0 0 0 0 -0 0</pose>
+      <parent>base_link_y_1</parent>
+      <child>base_link_1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_1'>
+      <pose relative_to='mobile_joint_theta_1'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0.000498 0.050002 0 -0 0</pose>
+        <mass>201</mass>
+        <inertia>
+          <ixx>3.50995</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>3.5</iyy>
+          <iyz>-4.97512e-05</iyz>
+          <izz>3.00995</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_1_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.2</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='base_link_1_fixed_joint_lump__feature_link_1_collision_1'>
+        <pose>0 0.1 0.0505 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.001</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='base_link_1_fixed_joint_lump__lidar_link_1_collision_2'>
+        <pose>0 0 0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='base_link_1_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.2</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='base_link_1_fixed_joint_lump__feature_link_1_visual_1'>
+        <pose>0 0.1 0.0505 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.001</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='base_link_1_fixed_joint_lump__lidar_link_1_visual_2'>
+        <pose>0 0 0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='mobile_joint_x_2' type='prismatic'>
+      <pose relative_to='__model__'>1.5 0 0.05 0 -0 0</pose>
+      <parent>world</parent>
+      <child>base_link_x_2</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_x_2'>
+      <pose relative_to='mobile_joint_x_2'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='mobile_joint_y_2' type='prismatic'>
+      <pose relative_to='base_link_x_2'>1.5 0 0 0 -0 0</pose>
+      <parent>base_link_x_2</parent>
+      <child>base_link_y_2</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_y_2'>
+      <pose relative_to='mobile_joint_y_2'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+    </link>
+    <joint name='mobile_joint_theta_2' type='revolute'>
+      <pose relative_to='base_link_y_2'>0 0 0 0 -0 0</pose>
+      <parent>base_link_y_2</parent>
+      <child>base_link_2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-5</lower>
+          <upper>5</upper>
+          <effort>87</effort>
+          <velocity>2.175</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link_2'>
+      <pose relative_to='mobile_joint_theta_2'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0.753731 0.000498 0.050002 0 -0 0</pose>
+        <mass>201</mass>
+        <inertia>
+          <ixx>3.50995</ixx>
+          <ixy>-0.0746269</ixy>
+          <ixz>-7.50037</ixz>
+          <iyy>116.56</iyy>
+          <iyz>-4.97512e-05</iyz>
+          <izz>116.07</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_2_collision'>
+        <pose>1.5 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.2</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='base_link_2_fixed_joint_lump__feature_link_2_collision_1'>
+        <pose>1.5 0.1 0.0505 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.001</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='base_link_2_fixed_joint_lump__lidar_link_2_collision_2'>
+        <pose>1.5 0 0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='base_link_2_visual'>
+        <pose>1.5 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.2</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='base_link_2_fixed_joint_lump__feature_link_2_visual_1'>
+        <pose>1.5 0.1 0.0505 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.001</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='base_link_2_fixed_joint_lump__lidar_link_2_visual_2'>
+        <pose>1.5 0 0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.1</length>
+            <radius>0.02</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="robot_description" textfile="$(find rocket_sim)/models/rocket/rocket_model.urdf" />
+  <param name="robot_description_sdf" textfile="$(find rocket_sim)/models/rocket/rocket.sdf" />
+  <env name="GAZEBO_MODEL_PATH" value="$(find rocket_sim)/models" />
+  <!-- <group ns="rocket_sim"> -->
+  <rosparam file="$(find rocket_sim)/config/rocket.yaml" command="load" />
+  <!-- </group> -->
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="debug" default="false" />
+  <arg name="gui" default="true" />
+  <arg name="pause" default="false" />
+  <arg name="world" default="$(find rocket_sim)/worlds/training.world" />
+  <arg name="extra_gazebo_args" default="--verbose" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg pause)" />
+    <!-- <arg name="verbose" value="true"/> -->
+    <arg name="use_sim_time" value="true" />
+    <arg name="extra_gazebo_args" value="$(arg extra_gazebo_args)" />
+  </include>
+
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model rocket_model -param robot_description" />
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/rocket_sim"
+    args="thruster_pitch_joint_position_controller thruster_roll_joint_position_controller joint_state_controller" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/rocket_sim/joint_states" />
+  </node>
+
+</launch>

@@ -1,0 +1,267 @@
+<?xml version="1.0"?>
+<!-- Revolute-Revolute Manipulator -->
+<robot name="rocket" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <origin xyz="0 0 1" rpy="0 0 0"/>
+
+    <!-- Constants for robot dimensions -->
+    <xacro:property name="m_pi" value="3.1416"/>   <!-- Beams are square in length and width -->
+    <xacro:property name="radius" value="0.1"/>   <!-- Beams are square in length and width -->
+    <xacro:property name="model_z_offset" value="0.5"/>    <!-- damping coefficient -->
+    <xacro:property name="length" value="0.2"/>   <!-- Beams are square in length and width -->
+    <xacro:property name="width" value="0.1"/>   <!-- Beams are square in length and width -->
+    <xacro:property name="height1" value="2"/>   <!-- Link 1 -->
+    <xacro:property name="height2" value="1"/>   <!-- Link 2 -->
+    <xacro:property name="height3" value="1"/>   <!-- Link 3 -->
+    <xacro:property name="body_offset" value="0.05"/> <!-- Space between joint and end of beam -->
+    <xacro:property name="damp" value="0.7"/>    <!-- damping coefficient -->
+
+    <!-- Import Rviz colors -->
+    <!-- <xacro:include filename="$(find ros_robotics)/urdf/materials.xacro" /> -->
+
+    <!-- Default Inertial -->
+    <xacro:macro name="default_inertial" params="z_value mass">
+        <inertial>
+            <origin xyz="0 0 ${z_value}" rpy="0 0 0"/>
+            <mass value="${mass}"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                     iyy="1.0" iyz="0.0"
+                     izz="1.0"/>
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="box_inertial" params="x y z mass">
+        <inertial>
+            <mass value="${mass}"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="${0.0833333 * mass * (y*y + z*z)}" ixy="0.0" ixz="0.0"
+                     iyy="${0.0833333 * mass * (x*x + z*z)}" iyz="0.0"
+                     izz="${0.0833333 * mass * (x*x + y*y)}"/>
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="cylinder_inertial" params="radius length mass">
+        <inertial>
+            <mass value="${mass}"/>
+            <origin xyz="0 0 0"/>
+            <inertia ixx="${0.0833333 * mass * (3 * radius * radius + length * length)}" ixy="0.0" ixz="0.0"
+                     iyy="${0.0833333 * mass * (3 * radius * radius + length * length)}" iyz="0.0"
+                     izz="${0.5 * mass * radius * radius}"/>
+        </inertial>
+    </xacro:macro>
+
+
+    <!--  Base station  -->
+
+    <link name="base_station">
+        <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>
+        <visual>
+            <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
+            <geometry>
+                <box size="1 1 0.1"/>
+            </geometry>
+        </visual>
+        <visual>
+            <origin xyz="0 -0.5 1" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 2"/>
+            </geometry>
+        </visual>
+        <collision>
+            <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
+            <geometry>
+                <box size="1 1 0.01"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertial x="1" y="1" z="0.11" mass="5000"/>
+    </link>
+
+    <joint name="moving_station_joint" type="prismatic">
+        <parent link="base_station"/>
+        <child link="moving_station"/>
+        <origin xyz="0 -0.5 1.5" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+
+        <dynamics damping="0.01" friction="0.01"/>
+        <limit effort="3000" velocity="1.0" lower="-0.5" upper="0.5"/>
+    </joint>
+
+    <link name="moving_station">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.15 0.15 0.2"/>
+            </geometry>
+        </visual>
+
+        <!--  Attached rectangle to the moving part  -->
+        <visual>
+            <origin xyz="0 0.25 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0.25 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.5 0.1"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertial x="0.1" y="0.5" z="0.1" mass="20"/>
+    </link>
+
+
+    <joint name="station_to_rocket" type="revolute">
+        <parent link="moving_station"/>
+        <child link="base_link"/>
+        <origin xyz="0 0.5 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <dynamics damping="0.03" friction="0.03"/>
+        <limit effort="100000.0" velocity="5" lower="-1" upper="1"/>
+    </joint>
+
+    <!-- Rocket model -->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 ${length}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${length*4}" radius="${radius*1.5}"/>
+            </geometry>
+            <!-- <material name="red"/> -->
+        </visual>
+        <collision>
+            <origin xyz="0 0 ${length}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${length*4}" radius="${radius*1.5}"/>
+            </geometry>
+        </collision>
+        <!--        <xacro:cylinder_inertial length="${length*4}" radius="${length*1.5}" mass="10"/>-->
+        <xacro:box_inertial x="0.25" y="0.25" z="0.75" mass="10"/>
+    </link>
+
+
+    <joint name="thruster_pitch_joint" type="revolute">
+        <parent link="base_link"/>
+        <child link="roll_link"/>
+        <origin xyz="0 0 -${length}" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <!--        <dynamics damping="${damp}"/>-->
+        <dynamics damping="100" friction="100"/>
+        <limit effort="100.0" velocity="0.5" lower="-0.01" upper="0.01"/>
+    </joint>
+
+    <link name="roll_link">
+        <visual>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertial x="0.01" y="0.01" z="0.01" mass="0.3"/>
+    </link>
+
+    <joint name="thruster_roll_joint" type="revolute">
+        <parent link="roll_link"/>
+        <child link="thruster"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <!--        <dynamics damping="${damp}"/>-->
+        <dynamics damping="0.5" friction="0.5"/>
+        <limit effort="10000.0" velocity="5" lower="-2" upper="2"/>
+    </joint>
+    <link name="thruster">
+        <visual>
+            <origin xyz="0 0 -${length*0.5}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${length}" radius="${radius/2}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 -${length*0.5}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="${length}" radius="${radius/2}"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertial x="0.01" y="0.01" z="0.01" mass="0.3"/>
+    </link>
+
+
+    <!--        <link name="thruster">-->
+    <!--            <visual>-->
+    <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
+    <!--                <geometry>-->
+    <!--                </geometry>-->
+    <!--            </visual>-->
+
+    <!--            <collision>-->
+    <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
+    <!--                <geometry>-->
+    <!--                </geometry>-->
+    <!--            </collision>-->
+    <!--            &lt;!&ndash;        <xacro:cylinder_inertial length="${length}" radius="${length*0.5}" mass="0.2"/>&ndash;&gt;-->
+    <!--            <xacro:box_inertial x="${length/2}" y="${length/2}" z="${length}" mass="0.2"/>-->
+    <!--        </link>-->
+
+
+    <transmission name="tran1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="thruster_pitch_joint">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor1">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="tran2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="thruster_roll_joint">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor2">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <gazebo reference="base_station">
+        <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <gazebo reference="moving_station">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <!--    <gazebo reference="base_link">-->
+    <!--        <gravity>1</gravity>-->
+    <!--    </gazebo>-->
+
+    <!--    <gazebo reference="roll_link">-->
+    <!--        <gravity>1</gravity>-->
+    <!--    </gazebo>-->
+    <!--    <gazebo reference="thruster">-->
+    <!--        <gravity>1</gravity>-->
+    <!--    </gazebo>-->
+
+    <gazebo>
+        <plugin name="force_plugin" filename="libforce_plugin.so"/>
+
+        <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+            <alwaysOn>true</alwaysOn>
+            <bodyName>base_link</bodyName>
+            <topicName>imu</topicName>
+            <serviceName>imu_service</serviceName>
+            <gaussianNoise>0.0</gaussianNoise>
+            <updateRate>20.0</updateRate>
+        </plugin>
+
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/rocket_sim</robotNamespace>
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        </plugin>
+    </gazebo>
+
+</robot>

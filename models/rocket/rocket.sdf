@@ -1,0 +1,312 @@
+<sdf version='1.7'>
+  <model name='rocket'>
+    <link name='base_station'>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>5000</mass>
+        <inertia>
+          <ixx>421.708</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>421.708</iyy>
+          <iyz>0</iyz>
+          <izz>833.333</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_station_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>1 1 0.01</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='base_station_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>1 1 0.1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name='base_station_visual_1'>
+        <pose>0 -0.5 1 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.1 2</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+    </link>
+    <joint name='moving_station_joint' type='prismatic'>
+      <pose relative_to='base_station'>0 -0.5 1.5 0 -0 0</pose>
+      <parent>base_station</parent>
+      <child>moving_station</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.5</lower>
+          <upper>0.5</upper>
+          <effort>3000</effort>
+          <velocity>1</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.01</damping>
+          <friction>0.01</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='moving_station'>
+      <pose relative_to='moving_station_joint'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>20</mass>
+        <inertia>
+          <ixx>0.433333</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0333333</iyy>
+          <iyz>0</iyz>
+          <izz>0.433333</izz>
+        </inertia>
+      </inertial>
+      <collision name='moving_station_collision'>
+        <pose>0 0.25 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.5 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='moving_station_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.15 0.15 0.2</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Blue</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name='moving_station_visual_1'>
+        <pose>0 0.25 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.5 0.1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Blue</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+    </link>
+    <joint name='station_to_rocket' type='revolute'>
+      <pose relative_to='moving_station'>0 0.5 0 0 -0 0</pose>
+      <parent>moving_station</parent>
+      <child>base_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1</lower>
+          <upper>1</upper>
+          <effort>100000</effort>
+          <velocity>5</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.03</damping>
+          <friction>0.03</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='base_link'>
+      <pose relative_to='station_to_rocket'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>10</mass>
+        <inertia>
+          <ixx>0.520833</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.520833</iyy>
+          <iyz>0</iyz>
+          <izz>0.104167</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose>0 0 0.2 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.8</length>
+            <radius>0.15</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 0.2 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.8</length>
+            <radius>0.15</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='thruster_pitch_joint' type='revolute'>
+      <pose relative_to='base_link'>0 0 -0.2 0 -0 0</pose>
+      <parent>base_link</parent>
+      <child>roll_link</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.01</lower>
+          <upper>0.01</upper>
+          <effort>100</effort>
+          <velocity>0.5</velocity>
+        </limit>
+        <dynamics>
+          <damping>100</damping>
+          <friction>100</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='roll_link'>
+      <pose relative_to='thruster_pitch_joint'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.3</mass>
+        <inertia>
+          <ixx>5e-06</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>5e-06</iyy>
+          <iyz>0</iyz>
+          <izz>5e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name='roll_link_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.001 0.001 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='roll_link_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.01 0.01</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='thruster_roll_joint' type='revolute'>
+      <pose relative_to='roll_link'>0 0 0 0 -0 0</pose>
+      <parent>roll_link</parent>
+      <child>thruster</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-2</lower>
+          <upper>2</upper>
+          <effort>10000</effort>
+          <velocity>5</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.5</damping>
+          <friction>0.5</friction>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='thruster'>
+      <pose relative_to='thruster_roll_joint'>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.3</mass>
+        <inertia>
+          <ixx>5e-06</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>5e-06</iyy>
+          <iyz>0</iyz>
+          <izz>5e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name='thruster_collision'>
+        <pose>0 0 -0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.2</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='thruster_visual'>
+        <pose>0 0 -0.1 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.2</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <plugin name='force_plugin' filename='libforce_plugin.so'/>
+    <plugin name='imu_plugin' filename='libgazebo_ros_imu.so'>
+      <alwaysOn>1</alwaysOn>
+      <bodyName>base_link</bodyName>
+      <topicName>imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>20.0</updateRate>
+    </plugin>
+    <plugin name='gazebo_ros_control' filename='libgazebo_ros_control.so'>
+      <robotNamespace>/rocket_sim</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+    <pose>0 0 1 0 -0 0</pose>
+  </model>
+</sdf>
