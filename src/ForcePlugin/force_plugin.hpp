@@ -24,19 +24,22 @@ namespace gazebo
 
     private:
         bool init = false;
+        std_msgs::Float64 z_thrust_;
         std::unique_ptr<ros::NodeHandle> nh_;
         gazebo::physics::ModelPtr model_;
         gazebo::physics::LinkPtr thruster_link_;
         sdf::ElementPtr sdf_;
         std::string robot_namespace_;
 
-        ros::Subscriber params_sub;
+        ros::Subscriber thruster_force_sub_;
         std::vector<event::ConnectionPtr> connections;
 
         void getNamespace(const physics::ModelPtr &_model);
 
         void onUpdate();
         void onReset();
+
+        void ThrusterForceCallback(const std_msgs::Float64ConstPtr& msg);
     };
 
 // Register this plugin with the simulator

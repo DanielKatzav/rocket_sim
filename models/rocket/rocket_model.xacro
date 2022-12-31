@@ -56,7 +56,6 @@
     <link name="base_station">
         <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>
         <visual>
-            <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
             <geometry>
                 <box size="1 1 0.1"/>
             </geometry>
@@ -68,7 +67,6 @@
             </geometry>
         </visual>
         <collision>
-            <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
             <geometry>
                 <box size="1 1 0.01"/>
             </geometry>
@@ -127,7 +125,6 @@
             <geometry>
                 <cylinder length="${length*4}" radius="${radius*1.5}"/>
             </geometry>
-            <!-- <material name="red"/> -->
         </visual>
         <collision>
             <origin xyz="0 0 ${length}" rpy="0 0 0"/>
@@ -135,22 +132,20 @@
                 <cylinder length="${length*4}" radius="${radius*1.5}"/>
             </geometry>
         </collision>
-        <!--        <xacro:cylinder_inertial length="${length*4}" radius="${length*1.5}" mass="10"/>-->
         <xacro:box_inertial x="0.25" y="0.25" z="0.75" mass="10"/>
     </link>
 
 
     <joint name="thruster_pitch_joint" type="revolute">
         <parent link="base_link"/>
-        <child link="roll_link"/>
+        <child link="yaw_link"/>
         <origin xyz="0 0 -${length}" rpy="0 0 0"/>
         <axis xyz="1 0 0"/>
-        <!--        <dynamics damping="${damp}"/>-->
         <dynamics damping="100" friction="100"/>
         <limit effort="100.0" velocity="0.5" lower="-0.01" upper="0.01"/>
     </joint>
 
-    <link name="roll_link">
+    <link name="yaw_link">
         <visual>
             <geometry>
                 <box size="0.01 0.01 0.01"/>
@@ -164,12 +159,11 @@
         <xacro:box_inertial x="0.01" y="0.01" z="0.01" mass="0.3"/>
     </link>
 
-    <joint name="thruster_roll_joint" type="revolute">
-        <parent link="roll_link"/>
+    <joint name="thruster_yaw_joint" type="revolute">
+        <parent link="yaw_link"/>
         <child link="thruster"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
-        <!--        <dynamics damping="${damp}"/>-->
         <dynamics damping="0.5" friction="0.5"/>
         <limit effort="10000.0" velocity="5" lower="-2" upper="2"/>
     </joint>
@@ -190,23 +184,6 @@
     </link>
 
 
-    <!--        <link name="thruster">-->
-    <!--            <visual>-->
-    <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
-    <!--                <geometry>-->
-    <!--                </geometry>-->
-    <!--            </visual>-->
-
-    <!--            <collision>-->
-    <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
-    <!--                <geometry>-->
-    <!--                </geometry>-->
-    <!--            </collision>-->
-    <!--            &lt;!&ndash;        <xacro:cylinder_inertial length="${length}" radius="${length*0.5}" mass="0.2"/>&ndash;&gt;-->
-    <!--            <xacro:box_inertial x="${length/2}" y="${length/2}" z="${length}" mass="0.2"/>-->
-    <!--        </link>-->
-
-
     <transmission name="tran1">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="thruster_pitch_joint">
@@ -219,7 +196,7 @@
     </transmission>
     <transmission name="tran2">
         <type>transmission_interface/SimpleTransmission</type>
-        <joint name="thruster_roll_joint">
+        <joint name="thruster_yaw_joint">
             <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
         </joint>
         <actuator name="motor2">
@@ -235,16 +212,6 @@
     <gazebo reference="moving_station">
         <material>Gazebo/Blue</material>
     </gazebo>
-    <!--    <gazebo reference="base_link">-->
-    <!--        <gravity>1</gravity>-->
-    <!--    </gazebo>-->
-
-    <!--    <gazebo reference="roll_link">-->
-    <!--        <gravity>1</gravity>-->
-    <!--    </gazebo>-->
-    <!--    <gazebo reference="thruster">-->
-    <!--        <gravity>1</gravity>-->
-    <!--    </gazebo>-->
 
     <gazebo>
         <plugin name="force_plugin" filename="libforce_plugin.so"/>

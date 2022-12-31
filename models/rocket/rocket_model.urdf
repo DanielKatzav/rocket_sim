@@ -13,7 +13,6 @@
   <link name="base_station">
     <origin rpy="0 0 0" xyz="0 0 -0.4"/>
     <visual>
-      <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
       <geometry>
         <box size="1 1 0.1"/>
       </geometry>
@@ -25,7 +24,6 @@
       </geometry>
     </visual>
     <collision>
-      <!--            <origin xyz="0 0 -${2*length}" rpy="0 0 0"/>-->
       <geometry>
         <box size="1 1 0.01"/>
       </geometry>
@@ -85,7 +83,6 @@
       <geometry>
         <cylinder length="0.8" radius="0.15000000000000002"/>
       </geometry>
-      <!-- <material name="red"/> -->
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.2"/>
@@ -101,14 +98,13 @@
   </link>
   <joint name="thruster_pitch_joint" type="revolute">
     <parent link="base_link"/>
-    <child link="roll_link"/>
+    <child link="yaw_link"/>
     <origin rpy="0 0 0" xyz="0 0 -0.2"/>
     <axis xyz="1 0 0"/>
-    <!--        <dynamics damping="${damp}"/>-->
     <dynamics damping="100" friction="100"/>
     <limit effort="100.0" lower="-0.01" upper="0.01" velocity="0.5"/>
   </joint>
-  <link name="roll_link">
+  <link name="yaw_link">
     <visual>
       <geometry>
         <box size="0.01 0.01 0.01"/>
@@ -125,12 +121,11 @@
       <inertia ixx="4.999998e-06" ixy="0.0" ixz="0.0" iyy="4.999998e-06" iyz="0.0" izz="4.999998e-06"/>
     </inertial>
   </link>
-  <joint name="thruster_roll_joint" type="revolute">
-    <parent link="roll_link"/>
+  <joint name="thruster_yaw_joint" type="revolute">
+    <parent link="yaw_link"/>
     <child link="thruster"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <!--        <dynamics damping="${damp}"/>-->
     <dynamics damping="0.5" friction="0.5"/>
     <limit effort="10000.0" lower="-2" upper="2" velocity="5"/>
   </joint>
@@ -153,20 +148,6 @@
       <inertia ixx="4.999998e-06" ixy="0.0" ixz="0.0" iyy="4.999998e-06" iyz="0.0" izz="4.999998e-06"/>
     </inertial>
   </link>
-  <!--        <link name="thruster">-->
-  <!--            <visual>-->
-  <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
-  <!--                <geometry>-->
-  <!--                </geometry>-->
-  <!--            </visual>-->
-  <!--            <collision>-->
-  <!--                &lt;!&ndash;            <origin xyz="0 0 -${length/2}" rpy="0 0 0"/>&ndash;&gt;-->
-  <!--                <geometry>-->
-  <!--                </geometry>-->
-  <!--            </collision>-->
-  <!--            &lt;!&ndash;        <xacro:cylinder_inertial length="${length}" radius="${length*0.5}" mass="0.2"/>&ndash;&gt;-->
-  <!--            <xacro:box_inertial x="${length/2}" y="${length/2}" z="${length}" mass="0.2"/>-->
-  <!--        </link>-->
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="thruster_pitch_joint">
@@ -179,7 +160,7 @@
   </transmission>
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="thruster_roll_joint">
+    <joint name="thruster_yaw_joint">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor2">
@@ -193,15 +174,6 @@
   <gazebo reference="moving_station">
     <material>Gazebo/Blue</material>
   </gazebo>
-  <!--    <gazebo reference="base_link">-->
-  <!--        <gravity>1</gravity>-->
-  <!--    </gazebo>-->
-  <!--    <gazebo reference="roll_link">-->
-  <!--        <gravity>1</gravity>-->
-  <!--    </gazebo>-->
-  <!--    <gazebo reference="thruster">-->
-  <!--        <gravity>1</gravity>-->
-  <!--    </gazebo>-->
   <gazebo>
     <plugin filename="libforce_plugin.so" name="force_plugin"/>
     <plugin filename="libgazebo_ros_imu.so" name="imu_plugin">

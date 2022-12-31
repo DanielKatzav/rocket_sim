@@ -193,7 +193,7 @@
     <joint name='thruster_pitch_joint' type='revolute'>
       <pose relative_to='base_link'>0 0 -0.2 0 -0 0</pose>
       <parent>base_link</parent>
-      <child>roll_link</child>
+      <child>yaw_link</child>
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -210,7 +210,7 @@
         </dynamics>
       </axis>
     </joint>
-    <link name='roll_link'>
+    <link name='yaw_link'>
       <pose relative_to='thruster_pitch_joint'>0 0 0 0 -0 0</pose>
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
@@ -224,7 +224,7 @@
           <izz>5e-06</izz>
         </inertia>
       </inertial>
-      <collision name='roll_link_collision'>
+      <collision name='yaw_link_collision'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <box>
@@ -232,7 +232,7 @@
           </box>
         </geometry>
       </collision>
-      <visual name='roll_link_visual'>
+      <visual name='yaw_link_visual'>
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <box>
@@ -241,9 +241,9 @@
         </geometry>
       </visual>
     </link>
-    <joint name='thruster_roll_joint' type='revolute'>
-      <pose relative_to='roll_link'>0 0 0 0 -0 0</pose>
-      <parent>roll_link</parent>
+    <joint name='thruster_yaw_joint' type='revolute'>
+      <pose relative_to='yaw_link'>0 0 0 0 -0 0</pose>
+      <parent>yaw_link</parent>
       <child>thruster</child>
       <axis>
         <xyz>0 1 0</xyz>
@@ -262,7 +262,7 @@
       </axis>
     </joint>
     <link name='thruster'>
-      <pose relative_to='thruster_roll_joint'>0 0 0 0 -0 0</pose>
+      <pose relative_to='thruster_yaw_joint'>0 0 0 0 -0 0</pose>
       <inertial>
         <pose>0 0 0 0 -0 0</pose>
         <mass>0.3</mass>
