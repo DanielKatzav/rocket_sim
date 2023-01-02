@@ -33,6 +33,11 @@ void gazebo::ForcePlugin::onUpdate()
 {
 //    thruster_link_->SetForce(ignition::math::Vector3d(0,0,100));
     thruster_link_->AddLinkForce(ignition::math::Vector3d(0, 0, z_thrust_.data));
+    if (ros::Time::now().toSec() - latest_force_update_time_.toSec() > 1)
+    {
+        z_thrust_.data = 0;
+    }
+
 }
 
 void gazebo::ForcePlugin::onReset()
@@ -43,4 +48,5 @@ void gazebo::ForcePlugin::onReset()
 void gazebo::ForcePlugin::ThrusterForceCallback(const std_msgs::Float64ConstPtr &msg)
 {
     z_thrust_.data = msg->data;
+    latest_force_update_time_ = ros::Time::now();
 }

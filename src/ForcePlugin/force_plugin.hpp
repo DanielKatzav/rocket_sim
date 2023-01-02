@@ -34,6 +34,8 @@ namespace gazebo
         ros::Subscriber thruster_force_sub_;
         std::vector<event::ConnectionPtr> connections;
 
+        ros::Time latest_force_update_time_;
+
         void getNamespace(const physics::ModelPtr &_model);
 
         void onUpdate();
